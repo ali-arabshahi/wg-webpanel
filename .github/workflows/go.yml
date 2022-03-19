@@ -1,0 +1,59 @@
+name: Go
+
+on:
+  workflow_dispatch:
+  
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos: [linux]
+        goarch: [amd64]
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Install Pcap 
+      run: sudo apt-get install libpcap-dev
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.17
+    - name: Install node
+      uses: actions/setup-node@master
+      with:
+        node-version: '14'
+    - name: Install ui dependencies
+      run: |
+       cd ./ui
+       npm install
+    - name: Build ui
+      run: |
+        cd ./ui
+        npm run build
+        mv dist static
+    - name: Build Binary
+      run: |
+       p_name=wg-webpanel
+       release_name="$p_name-${GITHUB_REF#refs/tags/*}-${{ matrix.goos }}-${{ matrix.goarch }}"
+       echo $release_name
+       tar_name="$release_name.tar.gz"
+       echo $tar_name
+       env GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o "$release_name" -v
+       tar czvf "$tar_name" "$release_name" config.json -C ui/ static
+       rm "$release_name"
+       rm -r ui/static
+       
+    - name: List content
+      run: |
+        ls -lah wg-webpanel-*
+
+    - name: Github Release
+      uses: softprops/action-gh-release@v0.1.14
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        draft: true
+        files: "wg-webpanel-*"

@@ -1,0 +1,10 @@
+{
+    "server-port": "9090",
+    "data-directory": "./data",
+    "static-dir": "./static",
+    "wireguard-config-path": "/etc/wireguard/wg0.conf",
+    "log-file-address": "./log",
+    "enable-https": false,
+    "cert-address": "",
+    "cert-key-address": ""
+}
