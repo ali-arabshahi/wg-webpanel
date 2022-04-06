@@ -107,11 +107,13 @@ func (an *analyzer) reload() error {
 func (an *analyzer) checkCaptureHandlerError() {
 	go func() {
 		for {
+			time.Sleep(500 * time.Millisecond)
 			select {
 			case handlerError := <-an.errorChan:
 				an.logger.ErrorLog("error recieve : " + handlerError.Error())
 				notStart := true
 				for notStart {
+					time.Sleep(500 * time.Millisecond)
 					err := an.reload()
 					if err == nil {
 						an.logger.Infolog("reload successfull")
