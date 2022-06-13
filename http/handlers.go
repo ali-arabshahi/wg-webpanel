@@ -195,8 +195,9 @@ func (httpsrv httpServer) getClientConfig(wg wgmgmt.IWgmgmtService) func(ctx ech
 		}
 
 		data := []byte(config)
-		ctx.Response().Header().Set(echo.HeaderContentDisposition, fmt.Sprintf("%s; filename=%q", "attachment", "client-config.txt"))
-		ctx.Response().Header().Set("X-FileName", fname+"-cfg.txt")
+		fileName := fname + ".conf"
+		ctx.Response().Header().Set(echo.HeaderContentDisposition, fmt.Sprintf("%s; filename=%q", "attachment", fileName))
+		ctx.Response().Header().Set("X-FileName", fileName)
 		return ctx.Blob(http.StatusOK, "text/plain", data)
 		// return ctx.String(200, config)
 	}
