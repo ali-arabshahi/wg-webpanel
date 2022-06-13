@@ -3,6 +3,7 @@ package http
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 	"wireguard-web-ui/system"
 	"wireguard-web-ui/usermanagment"
@@ -189,7 +190,11 @@ func (httpsrv httpServer) getClientConfig(wg wgmgmt.IWgmgmtService) func(ctx ech
 		if clientID == "" {
 			return httpsrv.jsonResponse(ctx, http.StatusBadRequest, "", fmt.Errorf("need parameter"))
 		}
-		config, fname, err := wg.GetClientConfig(clientID)
+		clientIDInt, pErr := strconv.ParseInt(clientID, 10, 64)
+		if pErr != nil {
+			return httpsrv.jsonResponse(ctx, http.StatusBadRequest, "", fmt.Errorf("id is wrong"))
+		}
+		config, fname, err := wg.GetClientConfig(clientIDInt)
 		if err != nil {
 			return httpsrv.jsonResponse(ctx, http.StatusInternalServerError, "", err)
 		}

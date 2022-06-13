@@ -76,7 +76,7 @@ func (mr *MockIWgmgmtServiceMockRecorder) GetAllClient() *gomock.Call {
 }
 
 // GetClient mocks base method.
-func (m *MockIWgmgmtService) GetClient(clientID string) (Client, error) {
+func (m *MockIWgmgmtService) GetClient(clientID int64) (Client, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetClient", clientID)
 	ret0, _ := ret[0].(Client)
@@ -91,7 +91,7 @@ func (mr *MockIWgmgmtServiceMockRecorder) GetClient(clientID interface{}) *gomoc
 }
 
 // GetClientConfig mocks base method.
-func (m *MockIWgmgmtService) GetClientConfig(clientID string) (string, string, error) {
+func (m *MockIWgmgmtService) GetClientConfig(clientID int64) (string, string, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetClientConfig", clientID)
 	ret0, _ := ret[0].(string)
@@ -164,7 +164,7 @@ func (mr *MockIWgmgmtServiceMockRecorder) RemoveClient(arg0 interface{}) *gomock
 }
 
 // SetclientAvailability mocks base method.
-func (m *MockIWgmgmtService) SetclientAvailability(clientID string, availability bool) error {
+func (m *MockIWgmgmtService) SetclientAvailability(clientID int64, availability bool) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SetclientAvailability", clientID, availability)
 	ret0, _ := ret[0].(error)
@@ -329,7 +329,7 @@ func (mr *MockIConfigStorageMockRecorder) AllTraffic() *gomock.Call {
 }
 
 // ClientByID mocks base method.
-func (m *MockIConfigStorage) ClientByID(clientID string) (Client, error) {
+func (m *MockIConfigStorage) ClientByID(clientID int64) (Client, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ClientByID", clientID)
 	ret0, _ := ret[0].(Client)

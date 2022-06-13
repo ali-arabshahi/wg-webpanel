@@ -4,7 +4,7 @@ import "time"
 
 // Client model
 type Client struct {
-	ID              string    `json:"id"`
+	ID              int64     `json:"id"`
 	PrivateKey      string    `json:"private_key"`
 	PublicKey       string    `json:"public_key"`
 	Name            string    `json:"name" validate:"required"`
@@ -38,6 +38,7 @@ type HandShake struct {
 
 // Server model
 type Server struct {
+	ID                 int64     `json:"-"`
 	Address            string    `json:"address" validate:"required,ip"`
 	TunnelAddress      string    `json:"tunnel_address" validate:"required,cidr"`
 	TunnelAddressMask  int       `json:"tunnel_address_mask"`

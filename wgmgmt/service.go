@@ -17,13 +17,13 @@ import (
 type IWgmgmtService interface {
 	WgStatus() ServerStatus
 	GetPeerInfo() ([]ClientStat, error)
-	GetClientConfig(clientID string) (string, string, error)
+	GetClientConfig(clientID int64) (string, string, error)
 	GetAllClient() []Client
-	GetClient(clientID string) (Client, error)
+	GetClient(clientID int64) (Client, error)
 	AddClient(client Client, autoKeyGen bool) error
 	RemoveClient(Client) error
 	UpdateClient(Client) error
-	SetclientAvailability(clientID string, availability bool) error
+	SetclientAvailability(clientID int64, availability bool) error
 	UsedTunelIPS() []string
 	GetServer() Server
 	AddServer(server Server, autoKeyGen bool) error
@@ -37,7 +37,7 @@ type IConfigStorage interface {
 	GetServerConfig() Server
 	SaveServerConfig(Server) error
 	AllClient() []Client
-	ClientByID(clientID string) (Client, error)
+	ClientByID(clientID int64) (Client, error)
 	ClientTrafficByIP(clientIP string) (SendByte int64, ReceiveByte int64, Error error)
 	ClientNumber() (int, int)
 	AllTraffic() (SendByte int64, ReceiveByte int64, Error error)
@@ -164,12 +164,12 @@ func (wg *wgService) GetAllClient() []Client {
 }
 
 // GetClientConfig :
-func (wg *wgService) GetClientConfig(clientID string) (string, string, error) {
+func (wg *wgService) GetClientConfig(clientID int64) (string, string, error) {
 	return wg.createClientConfigByID(clientID)
 }
 
 // GetClient :
-func (wg *wgService) GetClient(clientID string) (Client, error) {
+func (wg *wgService) GetClient(clientID int64) (Client, error) {
 	return wg.configStorage.ClientByID(clientID)
 }
 
@@ -238,7 +238,7 @@ func (wg *wgService) UpdateClient(updateClient Client) error {
 }
 
 // SetclientAvailability :
-func (wg *wgService) SetclientAvailability(clientID string, availability bool) error {
+func (wg *wgService) SetclientAvailability(clientID int64, availability bool) error {
 	client, err := wg.configStorage.ClientByID(clientID)
 	if err != nil {
 		return err

@@ -176,7 +176,7 @@ func TestConfigStore_ClientByID(t *testing.T) {
 	clients := store.AllClient()
 	getclient := clients[0]
 	type args struct {
-		clientID string
+		clientID int64
 	}
 	tests := []struct {
 		name    string
@@ -198,7 +198,7 @@ func TestConfigStore_ClientByID(t *testing.T) {
 			"not found",
 			store,
 			args{
-				clientID: "unknown id",
+				clientID: getclient.ID,
 			},
 			wgmgmt.Client{},
 			true,
@@ -230,8 +230,9 @@ func TestConfigStore_AddClient(t *testing.T) {
 	type args struct {
 		newClient wgmgmt.Client
 	}
+	cl1ID := time.Now().UnixNano()
 	sampleClient := wgmgmt.Client{
-		ID:          "id-1",
+		ID:          cl1ID,
 		PrivateKey:  "pri key",
 		PublicKey:   "pub key",
 		Name:        "ali",

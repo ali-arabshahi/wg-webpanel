@@ -48,7 +48,7 @@ func Test_wgService_GetAllClient(t *testing.T) {
 
 func Test_wgService_GetClient(t *testing.T) {
 	type args struct {
-		clientID string
+		clientID int64
 	}
 	tests := []struct {
 		name    string

@@ -84,7 +84,7 @@ func (wg *wgService) saveConfigToFile() error {
 	return nil
 }
 
-func (wg *wgService) createClientConfigByID(clientID string) (string, string, error) {
+func (wg *wgService) createClientConfigByID(clientID int64) (string, string, error) {
 	clientTemplate := template.New("client-config")
 	clientTemplate = clientTemplate.Funcs(template.FuncMap{"JoinStr": strings.Join})
 	clientTemplate, err := clientTemplate.Parse(clientConfigTemplate)

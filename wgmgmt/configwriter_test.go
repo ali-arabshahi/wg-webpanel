@@ -24,9 +24,11 @@ func Test_wgService_saveConfigToFile(t *testing.T) {
 		CreatedAt:  time.Now(),
 		UpdatedAt:  time.Now(),
 	}
+	cl1ID := time.Now().UnixNano()
+	cl2ID := time.Now().UnixNano()
 	sampleClient := []Client{
 		Client{
-			ID:          "id-client-1",
+			ID:          cl1ID,
 			PrivateKey:  "pri key",
 			PublicKey:   "pub key",
 			Name:        "ali",
@@ -38,7 +40,7 @@ func Test_wgService_saveConfigToFile(t *testing.T) {
 			UpdatedAt:   time.Now(),
 		},
 		Client{
-			ID:          "id-client-2",
+			ID:          cl2ID,
 			PrivateKey:  "pri ke2",
 			PublicKey:   "pub key-2",
 			Name:        "hasan",

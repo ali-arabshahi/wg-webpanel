@@ -11,6 +11,7 @@ import (
 	"os"
 	"path"
 	"sync"
+	"time"
 	"wireguard-web-ui/trafficcapture"
 	"wireguard-web-ui/usermanagment"
 	"wireguard-web-ui/wgmgmt"
@@ -150,7 +151,7 @@ func (cs *ConfigStore) AllClient() []wgmgmt.Client {
 }
 
 //---------------------------------------------
-func (cs *ConfigStore) ClientByID(clientID string) (wgmgmt.Client, error) {
+func (cs *ConfigStore) ClientByID(clientID int64) (wgmgmt.Client, error) {
 	sClient := wgmgmt.Client{}
 	for _, client := range cs.wgConfigStore.Clients {
 		if client.ID == clientID {
@@ -164,7 +165,7 @@ func (cs *ConfigStore) ClientByID(clientID string) (wgmgmt.Client, error) {
 
 //---------------------------------------------
 func (cs *ConfigStore) AddClient(newClient wgmgmt.Client) error {
-	clientID := uuid.New().String()
+	clientID := time.Now().UnixNano()
 	newClient.ID = clientID
 
 	cs.wgConfigStore.Clients = append(cs.wgConfigStore.Clients, newClient)
