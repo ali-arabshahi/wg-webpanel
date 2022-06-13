@@ -283,10 +283,14 @@ func (wg *wgService) GetServer() Server {
 // UpdateServer :
 func (wg *wgService) UpdateServer(servercfg Server) error {
 	if servercfg.AutoGenerateScript {
+		tunelInRul := fmt.Sprintf("iptables -A FORWARD -o %v -j ACCEPT", servercfg.Interface)
+		tunelOutRul := fmt.Sprintf("iptables -A FORWARD -i %v -j ACCEPT", servercfg.Interface)
 		natRule := fmt.Sprintf("iptables -t nat -I POSTROUTING -o %v -j MASQUERADE", servercfg.Interface)
-		servercfg.PostUp = []string{natRule}
+		servercfg.PostUp = []string{natRule, tunelInRul, tunelOutRul}
 		natRuleDown := fmt.Sprintf("iptables -t nat -D POSTROUTING -o %v -j MASQUERADE", servercfg.Interface)
-		servercfg.PostDown = []string{natRuleDown}
+		tunelInRulDown := fmt.Sprintf("iptables -D FORWARD -o %v -j ACCEPT", servercfg.Interface)
+		tunelOutRulDown := fmt.Sprintf("iptables -D FORWARD -i %v -j ACCEPT", servercfg.Interface)
+		servercfg.PostDown = []string{natRuleDown, tunelInRulDown, tunelOutRulDown}
 	}
 	if servercfg.AutoGenerateKey && servercfg.PrivateKey == "" && servercfg.PublicKey == "" {
 		privateKey, priErr := wgtypes.GeneratePrivateKey()
@@ -430,7 +434,7 @@ func (wg *wgService) statustWireguard() bool {
 	if cmdErr != nil {
 		return false
 	}
-	if strings.TrimSpace(stdout.String()) == wg.interfaceName {
+	if strings.Contains(strings.TrimSpace(stdout.String()), wg.interfaceName) {
 		return true
 	}
 	return false
