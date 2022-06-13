@@ -19,12 +19,12 @@ func TestNew(t *testing.T) {
 	fAdress := path.Join(tmp)
 	fAdress2 := path.Join(tmp2)
 	mockLogger := mockLogger{}
-	store, err := New(fAdress, mockLogger)
+	store, err := newFileStore(fAdress, mockLogger)
 	if err != nil {
 		t.Errorf("New() = %v", err)
 		return
 	}
-	store2, err := New(fAdress2, mockLogger)
+	store2, err := newFileStore(fAdress2, mockLogger)
 	if err != nil {
 		t.Errorf("New() = %v", err)
 		return
@@ -35,7 +35,7 @@ func TestNew(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
-		want    *ConfigStore
+		want    *fileStore
 		wantErr bool
 	}{
 		{"file not exist",
@@ -55,7 +55,7 @@ func TestNew(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := New(tt.args.fileAddr, mockLogger)
+			got, err := newFileStore(tt.args.fileAddr, mockLogger)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("New() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -71,7 +71,7 @@ func TestConfigStore_GetServerConfig(t *testing.T) {
 
 	tests := []struct {
 		name string
-		cs   *ConfigStore
+		cs   *fileStore
 		want wgmgmt.Server
 	}{
 		// TODO: Add test cases.
@@ -89,7 +89,7 @@ func TestConfigStore_SaveServerConfig(t *testing.T) {
 	mockLogger := mockLogger{}
 	tmp := t.TempDir()
 	fAdress := path.Join(tmp)
-	store, err := New(fAdress, mockLogger)
+	store, err := newFileStore(fAdress, mockLogger)
 	if err != nil {
 		t.Errorf("New() = %v", err)
 		return
@@ -109,7 +109,7 @@ func TestConfigStore_SaveServerConfig(t *testing.T) {
 	}
 	tests := []struct {
 		name    string
-		cs      *ConfigStore
+		cs      *fileStore
 		args    args
 		wantErr bool
 	}{
@@ -134,7 +134,7 @@ func TestConfigStore_SaveServerConfig(t *testing.T) {
 func TestConfigStore_AllClient(t *testing.T) {
 	tests := []struct {
 		name string
-		cs   *ConfigStore
+		cs   *fileStore
 		want []wgmgmt.Client
 	}{
 		// TODO: Add test cases.
@@ -152,7 +152,7 @@ func TestConfigStore_ClientByID(t *testing.T) {
 	tmp := t.TempDir()
 	mockLogger := mockLogger{}
 	fAdress := path.Join(tmp)
-	store, err := New(fAdress, mockLogger)
+	store, err := newFileStore(fAdress, mockLogger)
 	if err != nil {
 		t.Errorf("New() = %v", err)
 		return
@@ -180,7 +180,7 @@ func TestConfigStore_ClientByID(t *testing.T) {
 	}
 	tests := []struct {
 		name    string
-		cs      *ConfigStore
+		cs      *fileStore
 		args    args
 		want    wgmgmt.Client
 		wantErr bool
@@ -198,7 +198,7 @@ func TestConfigStore_ClientByID(t *testing.T) {
 			"not found",
 			store,
 			args{
-				clientID: getclient.ID,
+				clientID: 11111,
 			},
 			wgmgmt.Client{},
 			true,
@@ -222,7 +222,7 @@ func TestConfigStore_AddClient(t *testing.T) {
 	tmp := t.TempDir()
 	fAdress := path.Join(tmp)
 	mockLogger := mockLogger{}
-	store, err := New(fAdress, mockLogger)
+	store, err := newFileStore(fAdress, mockLogger)
 	if err != nil {
 		t.Errorf("New() = %v", err)
 		return
@@ -245,7 +245,7 @@ func TestConfigStore_AddClient(t *testing.T) {
 	}
 	tests := []struct {
 		name    string
-		cs      *ConfigStore
+		cs      *fileStore
 		args    args
 		wantErr bool
 	}{
@@ -273,7 +273,7 @@ func TestConfigStore_UpdateClient(t *testing.T) {
 	}
 	tests := []struct {
 		name    string
-		cs      *ConfigStore
+		cs      *fileStore
 		args    args
 		wantErr bool
 	}{
@@ -294,7 +294,7 @@ func TestConfigStore_RemoveClient(t *testing.T) {
 	}
 	tests := []struct {
 		name    string
-		cs      *ConfigStore
+		cs      *fileStore
 		args    args
 		wantErr bool
 	}{
@@ -313,7 +313,7 @@ func TestConfigStore_saveToFile(t *testing.T) {
 	mockLogger := mockLogger{}
 	tmp := t.TempDir()
 	fAdress := path.Join(tmp)
-	store, err := New(fAdress, mockLogger)
+	store, err := newFileStore(fAdress, mockLogger)
 	if err != nil {
 		t.Errorf("New() = %v", err)
 		return
@@ -352,7 +352,7 @@ func TestConfigStore_saveToFile(t *testing.T) {
 	}
 	tests := []struct {
 		name    string
-		cs      *ConfigStore
+		cs      *fileStore
 		wantErr bool
 	}{
 		{

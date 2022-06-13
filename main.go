@@ -35,7 +35,7 @@ func main() {
 	}
 	logger := servicelog.New("debug", &loggerFileConfig, true)
 	//-----------------------------
-	store, stErr := store.New(config.DataDirectory, logger)
+	store, stErr := store.NewStore(store.SqlliteType, config.DataDirectory, logger)
 	if stErr != nil {
 		log.Fatalln(stErr)
 	}
